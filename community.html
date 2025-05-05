@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community | AniFlix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        /* Community Page Specific Styles */
+        .community-hero {
+            height: 40vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1633613286991-611fe299c4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+        }
+
+        .community-hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .community-hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .community-container {
+            padding: 4rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .discussion-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--darker);
+            color: var(--light);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .discussion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .discussion-card {
+            background: var(--darker);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .discussion-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .discussion-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .discussion-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .discussion-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .discussion-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .discussion-body {
+            padding: 1.5rem;
+        }
+
+        .discussion-content {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .discussion-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1.5rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .discussion-stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .loading {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            padding: 3rem 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .community-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .discussion-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">AniFlix</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">Genres</a>
+            <a href="community.html">Community</a>
+            <a href="login.html">Login</a>
+            <a href="aboutUs.html">aboutUs</a>
+            <a href="#">Recent</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search discussions..." id="searchInput">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+            <div class="profile-icon">
+                <i class="fas fa-user-circle"></i>
+                <div class="dropdown-menu">
+                    <a href="#"><i class="fas fa-heart"></i> Favorite Anime</a>
+                    <a href="#"><i class="fas fa-users"></i> Favorite Characters</a>
+                    <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="community-hero">
+        <h1>AniFlix Community</h1>
+        <p>Join thousands of anime fans discussing their favorite shows, characters, and theories</p>
+        <a href="#discussions" class="btn btn-primary">View Discussions</a>
+    </section>
+
+    <div class="community-container" id="discussions">
+        <h2 class="section-title">Popular Discussions</h2>
+        
+        <div class="discussion-filters">
+            <button class="filter-btn active" data-category="all">All Topics</button>
+            <button class="filter-btn" data-category="general">General</button>
+            <button class="filter-btn" data-category="episodes">Episodes</button>
+            <button class="filter-btn" data-category="characters">Characters</button>
+            <button class="filter-btn" data-category="theories">Theories</button>
+        </div>
+        
+        <div class="discussion-grid" id="discussionGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="#">Genres</a>
+            <a href="#">New Releases</a>
+            <a href="community.html">Community</a>
+            <a href="#">Contact</a>
+            <a href="#">FAQ</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        <p class="copyright">© 2023 AniFlix. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Using Reddit API for anime discussions (public endpoint)
+        const API_URL = 'https://www.reddit.com/r/anime/top.json?limit=20';
+        let discussions = [];
+        let filteredDiscussions = [];
+        
+        // DOM Elements
+        const discussionGrid = document.getElementById('discussionGrid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        // Fetch discussions from API
+        async function fetchDiscussions() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                if (data.data && data.data.children) {
+                    discussions = data.data.children.map(post => ({
+                        id: post.data.id,
+                        title: post.data.title,
+                        content: post.data.selftext.substring(0, 200) + (post.data.selftext.length > 200 ? '...' : ''),
+                        author: post.data.author,
+                        upvotes: post.data.ups,
+                        comments: post.data.num_comments,
+                        category: getRandomCategory(),
+                        created: new Date(post.data.created_utc * 1000).toLocaleDateString(),
+                        avatar: `https://ui-avatars.com/api/?name=${post.data.author}&background=random`
+                    }));
+                    
+                    displayDiscussions(discussions);
+                    setupScrollAnimation();
+                } else {
+                    showNoResults();
+                }
+            } catch (error) {
+                console.error('Error fetching discussions:', error);
+                showNoResults();
+            }
+        }
+        
+        // Assign random categories for filtering demo
+        function getRandomCategory() {
+            const categories = ['general', 'episodes', 'characters', 'theories'];
+            return categories[Math.floor(Math.random() * categories.length)];
+        }
+        
+        // Display discussions
+        function displayDiscussions(discussionsToShow) {
+            discussionGrid.innerHTML = '';
+            
+            if (discussionsToShow.length === 0) {
+                showNoResults();
+                return;
+            }
+            
+            discussionsToShow.forEach(discussion => {
+                const discussionCard = document.createElement('div');
+                discussionCard.className = 'discussion-card';
+                discussionCard.dataset.category = discussion.category;
+                
+                discussionCard.innerHTML = `
+                    <div class="discussion-header">
+                        <h3 class="discussion-title">${discussion.title}</h3>
+                        <div class="discussion-meta">
+                            <span>${discussion.category}</span>
+                            <span>${discussion.created}</span>
+                        </div>
+                    </div>
+                    <div class="discussion-body">
+                        <p class="discussion-content">${discussion.content || 'No content available'}</p>
+                    </div>
+                    <div class="discussion-footer">
+                        <div class="discussion-stats">
+                            <div class="stat">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>${discussion.upvotes}</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-comment"></i>
+                                <span>${discussion.comments}</span>
+                            </div>
+                        </div>
+                        <div class="user-info">
+                            <img src="${discussion.avatar}" alt="${discussion.author}" class="user-avatar">
+                            <span>${discussion.author}</span>
+                        </div>
+                    </div>
+                `;
+                
+                discussionGrid.appendChild(discussionCard);
+            });
+        }
+        
+        // Filter discussions by category
+        function filterDiscussions(category) {
+            if (category === 'all') {
+                filteredDiscussions = [...discussions];
+            } else {
+                filteredDiscussions = discussions.filter(discussion => discussion.category === category);
+            }
+            displayDiscussions(filteredDiscussions);
+        }
+        
+        // Show no results message
+        function showNoResults() {
+            discussionGrid.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-exclamation-circle" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h3>No discussions found</h3>
+                    <p>Try refreshing the page or checking back later</p>
+                </div>
+            `;
+        }
+        
+        // Animate cards on scroll
+        function setupScrollAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.discussion-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+        
+        // Event listeners
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterDiscussions(btn.dataset.category);
+            });
+        });
+        
+        // Search functionality
+        function handleSearch(query) {
+            if (query.length < 3) return;
+            const filtered = discussions.filter(discussion => 
+                discussion.title.toLowerCase().includes(query.toLowerCase()) || 
+                discussion.content.toLowerCase().includes(query.toLowerCase())
+            );
+            displayDiscussions(filtered);
+        }
+        
+        document.getElementById('searchBtn').addEventListener('click', () => 
+            handleSearch(document.getElementById('searchInput').value));
+        
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch(document.getElementById('searchInput').value);
+        });
+        
+        // Initial load
+        document.addEventListener('DOMContentLoaded', fetchDiscussions);
+    </script>
+</body>
+</html>

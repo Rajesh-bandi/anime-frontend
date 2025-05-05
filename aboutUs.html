@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | AniFlix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        /* About Page Specific Styles */
+        .about-hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('anime.jpg') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, var(--darker) 70%);
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        .about-hero-content {
+            z-index: 2;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.3s;
+        }
+
+        .about-hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .about-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .floating-anime {
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-anime:nth-child(1) {
+            width: 120px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0.5s;
+            animation-name: float, fadeIn;
+            animation-duration: 6s, 1s;
+            animation-fill-mode: forwards;
+        }
+
+        .floating-anime:nth-child(2) {
+            width: 150px;
+            bottom: 15%;
+            right: 15%;
+            animation-delay: 1s;
+            animation-name: floatReverse, fadeIn;
+            animation-duration: 7s, 1s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes floatReverse {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.7; }
+        }
+
+        /* Mission Section */
+        .mission-section {
+            padding: 5rem 5%;
+            background-color: var(--darker);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .mission-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            transform: translateY(50px);
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,62,108,0.1) 0%, rgba(108,92,231,0.1) 100%);
+            z-index: -1;
+        }
+
+        .mission-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mission-card:nth-child(1) { transition-delay: 0.2s; }
+        .mission-card:nth-child(2) { transition-delay: 0.4s; }
+        .mission-card:nth-child(3) { transition-delay: 0.6s; }
+
+        .mission-card:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .mission-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 5rem 5%;
+            background-color: var(--dark);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            background: var(--darker);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        .team-member.visible {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .team-member:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .team-member img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .team-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .team-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .team-info p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        .stat-item.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .stat-item:nth-child(1) { transition-delay: 0.1s; }
+        .stat-item:nth-child(2) { transition-delay: 0.3s; }
+        .stat-item:nth-child(3) { transition-delay: 0.5s; }
+        .stat-item:nth-child(4) { transition-delay: 0.7s; }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .about-hero p {
+                font-size: 1.1rem;
+            }
+            
+            .floating-anime {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">AniFlix</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">Genres</a>
+            <a href="community.html">Community</a>
+            <a href="about.html" class="active">About Us</a>
+            <a href="#">Ongoing</a>
+            <a href="#">Recent</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search anime..." id="searchInput">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+            <div class="profile-icon">
+                <i class="fas fa-user-circle"></i>
+                <div class="dropdown-menu">
+                    <a href="#"><i class="fas fa-heart"></i> Favorite Anime</a>
+                    <a href="#"><i class="fas fa-users"></i> Favorite Characters</a>
+                    <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="about-hero">
+        <img src="https://cdn-icons-png.flaticon.com/512/651/651590.png" class="floating-anime" alt="Anime character">
+        <img src="https://cdn-icons-png.flaticon.com/512/651/651584.png" class="floating-anime" alt="Anime character">
+        <div class="about-hero-content">
+            <h1>Our Anime Journey</h1>
+            <p>Discover the passion behind AniFlix and the team dedicated to bringing you the best anime streaming experience</p>
+            <a href="#mission" class="btn btn-primary">Explore Our Story</a>
+        </div>
+    </section>
+
+    <section class="mission-section" id="mission">
+        <h2 class="section-title">Our Mission</h2>
+        <p class="section-subtitle">We're on a quest to revolutionize anime streaming</p>
+        
+        <div class="mission-grid">
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>Global Access</h3>
+                <p>Bringing anime to fans worldwide with our extensive library of titles, available anytime, anywhere.</p>
+            </div>
+            
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Fan First</h3>
+                <p>Built by anime fans, for anime fans. We prioritize what matters most to our community.</p>
+            </div>
+            
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Lightning Fast</h3>
+                <p>High-quality streaming with minimal buffering, so you never miss a moment of action.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <h2 class="section-title">Meet The Team</h2>
+        <p class="section-subtitle">The otakus behind the scenes</p>
+        
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="../assets/vamsi.jpg" alt="Team member">
+                <div class="team-info">
+                    <h3>Akula Vamsi Krishna</h3>
+                    <p>Member 1</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <img src="../assets/rajesh.jpg" alt="Team member">
+                <div class="team-info">
+                    <h3>Bandi Rajesh</h3>
+                    <p>Member 2</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <img src="../assets/sai.jpg" alt="Team member">
+                <div class="team-info">
+                    <h3>Balabhadra sai sathwik</h3>
+                    <p>Member 3</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <h2 class="section-title">By The Numbers</h2>
+        <p class="section-subtitle">Our impact in the anime community</p>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" id="animeCount">0</div>
+                <div class="stat-label">Anime Titles</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number" id="episodeCount">0</div>
+                <div class="stat-label">Episodes</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number" id="userCount">0</div>
+                <div class="stat-label">Happy Users</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number" id="streamCount">0</div>
+                <div class="stat-label">Hours Streamed</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="#">Genres</a>
+            <a href="#">New Releases</a>
+            <a href="about.html">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">FAQ</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        <p class="copyright">© 2023 AniFlix. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Animation trigger on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.mission-card, .team-member, .stat-item');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if(elementPosition < screenPosition) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+        
+        // Animate stats counting
+        function animateStats() {
+            const animeCount = document.getElementById('animeCount');
+            const episodeCount = document.getElementById('episodeCount');
+            const userCount = document.getElementById('userCount');
+            const streamCount = document.getElementById('streamCount');
+            
+            const animate = (element, target) => {
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if(current >= target) {
+                        clearInterval(timer);
+                        element.textContent = target.toLocaleString();
+                    } else {
+                        element.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            };
+            
+            animate(animeCount, 12500);
+            animate(episodeCount, 250000);
+            animate(userCount, 5000000);
+            animate(streamCount, 15000000);
+        }
+        
+        // Check if stats are in view and animate
+        function checkStats() {
+            const statsSection = document.querySelector('.stats-section');
+            const statsPosition = statsSection.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.2;
+            
+            if(statsPosition < screenPosition) {
+                animateStats();
+                window.removeEventListener('scroll', checkStats);
+            }
+        }
+        
+        // Event listeners
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('scroll', checkStats);
+        window.addEventListener('load', animateOnScroll);
+        
+        // Initialize animations
+        animateOnScroll();
+        
+        // Search functionality (same as other pages)
+        function handleSearch(query) {
+            if (query.length < 3) return;
+            document.body.classList.add('page-transition');
+            setTimeout(() => {
+                window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+            }, 500);
+        }
+        
+        document.getElementById('searchBtn').addEventListener('click', () => 
+            handleSearch(document.getElementById('searchInput').value));
+        
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch(document.getElementById('searchInput').value);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniFlix - Premium Anime Streaming</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="./css/style.css">
+
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">AniFlix</div>
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#">Genres</a>
+            <a href="community.html">Community</a>
+            <a href="aboutUs.html">aboutUs</a>
+            <a href="#">Recent</a>
+        </div>
+        <div class="search-login">
+        <div class="search-bar">
+            <input type="text" placeholder="Search anime..." id="searchInput">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="profile-dropdown">
+            <div class="profile-element">
+                <i class="fas fa-user-circle"></i>
+                <span class="username"></span>
+                <div class="dropdown-menu">
+                    <a href="#"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#"><i class="fas fa-heart"></i> Favorites</a>
+                    <a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+            <a href="login.html" class="login-link">Login</a>
+        </div>
+    </div>
+
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Unlimited Anime Streaming</h1>
+            <p>Watch your favorite anime anytime, anywhere. With thousands of titles and new episodes added daily, your
+                next anime adventure is just a click away.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Start Watching</a>
+                <a href="#" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section trending-section">
+        <h2 class="section-title">Trending Now</h2>
+        <div class="anime-grid" id="trendingAnime">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section new-releases">
+        <h2 class="section-title">New Releases</h2>
+        <div class="anime-grid" id="newReleases">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section ongoing-section">
+        <h2 class="section-title">Ongoing Series</h2>
+        <div class="anime-grid" id="ongoingAnime">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="aboutUs.html">About Us</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact</a>
+            <a href="#">FAQ</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        <p class="copyright">© 2023 AniFlix. All rights reserved.</p>
+    </footer>
+
+    <script src="./js/similar.js"></script>
+</body>
+
+</html>
